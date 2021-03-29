@@ -1,0 +1,16 @@
+---
+# tasks file for start-service
+#
+- name: Start the "{{web}}" service
+  service:
+    name: "{{web}}"
+    state: stopped
+  tags:
+    - start-service
+- name: Gathering service facts
+  service_facts:
+  register: services_state
+- debug: var=services_state.ansible_facts.services["{{web}}.service"].state
+  tags:
+    - start-services
+

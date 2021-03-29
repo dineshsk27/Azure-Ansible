@@ -1,0 +1,15 @@
+---
+# tasks file for stop-service
+- name: Stop the "{{web}}" service
+  service:
+    name: "{{web}}"
+    state: stopped
+  tags:
+    - stop-service
+- name: Gathering service facts
+  service_facts:
+  register: services_state
+- debug: var=services_state.ansible_facts.services["{{web}}.service"].state
+  tags:
+    - stop-services
+

@@ -1,0 +1,10 @@
+---
+# tasks file for web-services-status
+- name: Gathering Web-service facts
+  service_facts:
+  register: services_state
+- debug: var=services_state.ansible_facts.services["{{item}}.service"].state
+  loop:
+    - nginx
+    - apache
+    - redis

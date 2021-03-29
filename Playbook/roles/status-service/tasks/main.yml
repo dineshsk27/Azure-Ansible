@@ -1,0 +1,9 @@
+---
+# tasks file for status-service
+- name: Status the "{{web}}" service
+  service_facts:
+  register: services_state
+- debug: var=services_state.ansible_facts.services["{{web}}.service"].state
+  tags:
+    - status-services
+

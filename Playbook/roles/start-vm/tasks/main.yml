@@ -1,0 +1,6 @@
+---
+# tasks file for start-vm
+- name: Start virtual machine
+  azure_rm_virtualmachine:
+    resource_group: "{{resource}}"
+    name: "{{name}}"

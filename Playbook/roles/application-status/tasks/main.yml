@@ -1,0 +1,19 @@
+---
+# tasks file for application-status
+- name: "fetch {{item}} version"
+  command: "{{item}} --version"
+  changed_when: False
+  register: "{{item}}_result"
+  ignore_errors: True
+  loop:
+    - php
+    - java
+
+- name: start the service if it's enabled
+  debug:
+        msg: "Failed {{item}} is not installed"
+  when: ("{{item}}_result is failed ")
+  loop:
+    - php
+    - java
+    
