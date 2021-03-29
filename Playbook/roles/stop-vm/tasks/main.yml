@@ -2,6 +2,6 @@
 # tasks file for stop-vm
 - name: Stop virtual machine
   azure_rm_virtualmachine:
-    resource_group: dinesh-task
-    name: test
+    resource_group: "{{resource}}"
+    name: "{{name}}"
     allocated: no
