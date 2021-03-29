@@ -1,26 +1,26 @@
 - name: Create virtual network
   azure_rm_virtualnetwork:
-    resource_group: dinesh-task
+    resource_group: "{{resource}}"
     name: dinesh-task-vnets
     address_prefixes: "10.0.0.0/16"
 - name: Add subnet
   azure_rm_subnet:
-    resource_group: dinesh-task
+    resource_group: "{{resource}}"
     name: mySubnet
     address_prefix: "10.0.1.0/24"
-    virtual_network: dinesh-task-vnets
+    virtual_network: "{{resource}}-vnets"
 - name: Create public IP address
   azure_rm_publicipaddress:
-    resource_group: dinesh-task
+    resource_group: {{resource}}
     allocation_method: Static
-    name: dinesh-IP
+    name: "{{resource}}-IP"
   register: output_ip_address
 - name: Dump public IP for VM which will be created
   debug:
     msg: "The public IP is {{ output_ip_address.state.ip_address }}."
 - name: Create Network Security Group that allows SSH
   azure_rm_securitygroup:
-    resource_group: dinesh-task
+    resource_group: "{{resource}}"
     name: myNetworkSecurityGroup
     rules:
       - name: SSH
@@ -31,22 +31,22 @@
         direction: Inbound
 - name: Create virtual network interface card
   azure_rm_networkinterface:
-    resource_group: dinesh-task
-    name: dinesh-NIC
-    virtual_network: dinesh-task-vnets
+    resource_group: "{{resource}}"
+    name: "{{resource}}-NIC"
+    virtual_network: "{{resource}}-vnets"
     subnet: mySubnet
-    public_ip_name: dinesh-IP
-    security_group: myNetworkSecurityGroup
+    public_ip_name: "{{resource}}-IP"
+    security_group: "{{resource}}-NSG"
 - name: Create VM
   azure_rm_virtualmachine:
-    resource_group: dinesh-task
-    name: myVM
+    resource_group: "{{resource}}"
+    name: test
     vm_size: Standard_DS1_v2
     admin_username: azureuser
     ssh_password_enabled: false
     admin_password: ansible@12345
     ssh_password_enabled: true
-    network_interfaces: dinesh-NIC
+    network_interfaces: "{{resource}}-NIC"
     image:
       offer: CentOS
       publisher: OpenLogic
